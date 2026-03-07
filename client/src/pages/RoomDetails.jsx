@@ -47,29 +47,70 @@ const RoomDetails = () => {
 
     //onSubmit function to check availability & book the room
     const onSubmitHandler = async (e) => {
-     try {
-      e.preventDefault();
-      if (!isAvailable) {
-        return checkAvailability();
-      }else{
-        const {data} = await axios.post('/api/bookings/book', 
-          {roomId: id, checkInDate, checkOutDate, guests, paymentMethod: "Pay At Hotel"},
-          {headers: {Authorization: `Bearer ${await getToken()}`}})
-          if (data.success) {
-            toast.success(data.message)
-            navigate('/my-bookings')
-            scrollTo(0, 0)
-          }else{
-            toast.error(data.message)
-          }
-      }
+  try {
+    e.preventDefault();
 
-     } catch (error) {
-       toast.error("Error booking room")
-       console.log(error)
-
-     } 
+    if (!isAvailable) {
+      return checkAvailability();
     }
+
+    const token = await getToken();
+    // console.log("Token:", token);
+
+    if (!token) {
+      toast.error("Please login to book a room");
+      return navigate("/login");
+    }
+
+    const { data } = await axios.post(
+      "/api/bookings/book",
+      { roomId: id, checkInDate, checkOutDate, guests, paymentMethod: "Pay At Hotel" },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (data.success) {
+      toast.success(data.message);
+      navigate("/my-bookings");
+      scrollTo(0, 0);
+    } else {
+      toast.error(data.message);
+    }
+  } catch (error) {
+    console.log(error);
+    toast.error("Error booking room");
+  }
+};
+    // const onSubmitHandler = async (e) => {
+    //  try {
+    //   e.preventDefault();
+    //   if (!isAvailable) {
+    //     return checkAvailability();
+    //   }else{
+    //       const token = await getToken();
+      
+      
+    //     const {data} = await axios.post('/api/bookings/book', 
+    //       {roomId: id, checkInDate, checkOutDate, guests, paymentMethod: "Pay At Hotel"},
+    //       {headers: {Authorization: `Bearer ${await getToken()}`}})
+    //       if (data.success) {
+    //         toast.success(data.message)
+    //         navigate('/my-bookings')
+    //         scrollTo(0, 0)
+    //       }else{
+    //         toast.error(data.message)
+    //       }
+    //   }
+
+    //  } catch (error) {
+    //    toast.error("Error booking room")
+    //    console.log(error)
+
+    //  } 
+    // }
 
     useEffect(() => {
   if (!Array.isArray(rooms) || rooms.length === 0) return;
@@ -143,7 +184,7 @@ if (!room) {
         </div>
         {/* CheckIn CheckOut Form */}
         <form onSubmit={onSubmitHandler} className='flex flex-col md:flex-row items-start  
-        md:item-center justify-between bg-white shadow-[0px_0px_20px_rgba(0,0,0,0,0.15)]
+        md:item-center justify-between bg-white shadow-[0px_0px_20px_rgba(0,0,0,0.15)]
         p-6 rounded-xl mx-auto mt-16 max-w-6xl '>
             <div className='flex flex-col flex-wrap md:flex-row items-start md:items-center gap-4 md:gap-10 text-gray-500'>
                 {/* //checkIn input */}
@@ -167,7 +208,7 @@ if (!room) {
                 <div className='w-px h-15 bg-gray-300/70 max-md:hidden'></div>
                   <div className='flex flex-col'>
                     <label htmlFor="guests" className='font-medium'>Guests</label>
-                    <input onChange={(e)=>setGuests(e.target.value)} value={guests}
+                    <input onChange={(e)=>setGuests(Number(e.target.value))} value={guests}
                       type="number" id='guests' placeholder='1' 
                     className='max-w-20 rounded border border-gray-300 px-3 py-2 mt-1.5 outline-none' required/>
                 </div>

@@ -1,3 +1,5 @@
+// import transporter from "../configs/nodemailer.js";
+import resend from "../configs/resend.js";
 import Booking from "../models/Booking.js";
 import Hotel from "../models/Hotel.js";
 import Room from "../models/Room.js";
@@ -78,6 +80,59 @@ export const createBooking = async (req, res) => {
       checkOutDate,
       totalPrice,
     });
+
+    try {
+      await resend.emails.send({
+        from: process.env.SENDER_EMAIL,
+        to: req.user.email,
+        subject: "Booking Confirmation",
+        html: `
+      <h2>Your Booking Confirmation</h2>
+      <p>Dear ${req.user.username},</p>
+      <p>Thank you for booking with us! Here are your booking details:</p>
+      <ul>
+        <li><strong>Booking ID:</strong> ${booking._id}</li>
+        <li><strong>Hotel Name:</strong> ${roomData.hotel.name}</li>
+        <li><strong>Location:</strong> ${roomData.hotel.address}</li>
+        <li><strong>Date:</strong> ${new Date(booking.checkInDate).toDateString()}</li>
+        <li><strong>Booking Amount:</strong> ${process.env.CURRENCY || "$"} ${booking.totalPrice} /night</li>
+      </ul>
+      <p>We look forward to hosting you! If you have any questions, feel free to contact us.</p>
+      <p>Best regards,</p>
+    `,
+      });
+      console.log("Booking email sent");
+    } catch (error) {
+      console.log("Email error:", error);
+    }
+
+    // const mailOptions = {
+    //   from: process.env.SENDER_EMAIL,
+    //   to: req.user.email,
+    //   subject: "Booking Confirmation",
+    //   html: `
+    //     <h2> Your Booking Confirmation</h2>
+    //     <p>Dear ${req.user.name},</p>
+    //     <p>Thank you for booking with us! Here are your booking details:</p>
+    //     <ul>
+    //       <li><strong>Booking ID:</strong> ${booking._id}</li>
+    //       <li><strong>Hotel Name:</strong> ${roomData.hotel.name}</li>
+    //       <li><strong>Location:</strong> ${roomData.hotel.address}</li>
+    //       <li><strong>Date:</strong> ${new Date(booking.checkInDate).toDateString()}</li>
+    //       <li><strong>Booking Amount:</strong> ${process.env.CURRENCY || "$"} ${booking.totalPrice} /night</li>
+    //     </ul>
+    //     <p>We look forward to hosting you! If you have any questions, feel free to contact us.</p>
+    //     <p>Best regards,</p>
+
+    //   `,
+    // };
+
+    // try {
+    //   await transporter.sendMail(mailOptions);
+    //   console.log("Booking email sent");
+    // } catch (error) {
+    //   console.log("Email error:", error);
+    // }
 
     res.json({
       success: true,

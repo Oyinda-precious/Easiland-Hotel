@@ -53,13 +53,23 @@ export const createBooking = async (req, res) => {
     }
     //Get total price from room
     const roomData = await Room.findById(roomId).populate("hotel");
-    if (!roomData) {
+    console.log("Room Data:", roomData);
+    console.log("Hotel inside room:", roomData?.hotel);
+    if (!roomData || !roomData.hotel) {
       return res.json({
         success: false,
-        message: "Room not found",
+        message: "Room or hotel not found",
       });
     }
     let totalPrice = roomData.pricePerNight;
+    // const roomData = await Room.findById(roomId).populate("hotel");
+    // if (!roomData) {
+    //   return res.json({
+    //     success: false,
+    //     message: "Room not found",
+    //   });
+    // }
+
     // const roomData = await Room.findById(roomId).populate("hotel");
     // const roomData = await Room.findById(room).populate("hotel");
     // let totalPrice = roomData.pricePerNight;
@@ -74,7 +84,7 @@ export const createBooking = async (req, res) => {
     const booking = await Booking.create({
       user,
       room: roomId,
-      hotel: roomData.hotel._id,
+      hotel: roomData.hotel?._id,
       guests: +guests,
       checkInDate,
       checkOutDate,

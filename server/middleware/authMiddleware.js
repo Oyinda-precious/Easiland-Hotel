@@ -6,7 +6,7 @@ export const protect = [
 
   async (req, res, next) => {
     try {
-      const userId = req.auth.userId;
+      const userId = req.auth().userId;
 
       let user = await User.findById(userId);
 
@@ -121,3 +121,6 @@ export const protect = [
 //     return res.status(401).json({ message: "Not authenticated" });
 //   }
 // };
+
+// client ID 636416740153-toqggeklul0cakgqeop2qfnmeu9andl5.apps.googleusercontent.com
+//CLIENT SECRET-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

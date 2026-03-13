@@ -9,6 +9,7 @@ import hotelRouter from "./routes/hotelRoutes.js";
 import connectCloudinary from "./configs/cloudinary.js";
 import roomRouter from "./routes/roomRoutes.js";
 import bookingRouter from "./routes/bookingRoutes.js";
+import guestAuthRouter from "./routes/guestAuthRoutes.js";
 
 connectDB();
 connectCloudinary();
@@ -21,21 +22,21 @@ app.use(
     credentials: true,
   }),
 );
-// app.use(cors()); // Enable Cross-Origin Resource Sharing
 
-// middleware
 app.use(express.json());
-app.use(clerkMiddleware()); // Clerk middleware for authentication
+app.use(clerkMiddleware());
 
-//API to listen to clerk webhooks
+// Clerk webhooks
 app.use("/api/clerk", clerkWebhooks);
 
-app.get("/", (req, res) => res.send("API is running "));
-app.use("/api/user", userRouter);
+app.get("/", (req, res) => res.send("API is running"));
+
+// Routes
+app.use("/api/user", userRouter); // Clerk owner routes
+app.use("/api/guest", guestAuthRouter); // Guest custom auth (NEW)
 app.use("/api/hotels", hotelRouter);
 app.use("/api/rooms", roomRouter);
 app.use("/api/bookings", bookingRouter);
 
 const PORT = process.env.PORT || 3000;
-
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));

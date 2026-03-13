@@ -3,6 +3,8 @@ import resend from "../configs/resend.js";
 import Booking from "../models/Booking.js";
 import Hotel from "../models/Hotel.js";
 import Room from "../models/Room.js";
+// import PaystackService from "../services/paystackPayment.js";
+import axios from "axios";
 
 //function to check availability of rooms and make a booking
 const checkAvailability = async ({ checkInDate, checkOutDate, room }) => {
@@ -116,34 +118,6 @@ export const createBooking = async (req, res) => {
       console.log("Email error:", error);
     }
 
-    // const mailOptions = {
-    //   from: process.env.SENDER_EMAIL,
-    //   to: req.user.email,
-    //   subject: "Booking Confirmation",
-    //   html: `
-    //     <h2> Your Booking Confirmation</h2>
-    //     <p>Dear ${req.user.name},</p>
-    //     <p>Thank you for booking with us! Here are your booking details:</p>
-    //     <ul>
-    //       <li><strong>Booking ID:</strong> ${booking._id}</li>
-    //       <li><strong>Hotel Name:</strong> ${roomData.hotel.name}</li>
-    //       <li><strong>Location:</strong> ${roomData.hotel.address}</li>
-    //       <li><strong>Date:</strong> ${new Date(booking.checkInDate).toDateString()}</li>
-    //       <li><strong>Booking Amount:</strong> ${process.env.CURRENCY || "$"} ${booking.totalPrice} /night</li>
-    //     </ul>
-    //     <p>We look forward to hosting you! If you have any questions, feel free to contact us.</p>
-    //     <p>Best regards,</p>
-
-    //   `,
-    // };
-
-    // try {
-    //   await transporter.sendMail(mailOptions);
-    //   console.log("Booking email sent");
-    // } catch (error) {
-    //   console.log("Email error:", error);
-    // }
-
     res.json({
       success: true,
       message: "Booking created successfully",
@@ -159,10 +133,14 @@ export const createBooking = async (req, res) => {
 
 export const getUserBookings = async (req, res) => {
   try {
-    const user = req.user._id;
-    const bookings = await Booking.find({ user })
+    console.log("Logged in user id:", req.user._id);
+
+    const bookings = await Booking.find({ user: req.user._id })
       .populate("room hotel")
       .sort({ createdAt: -1 });
+
+    console.log("Bookings returned:", bookings);
+
     res.json({ success: true, bookings });
   } catch (error) {
     res.json({
@@ -173,11 +151,30 @@ export const getUserBookings = async (req, res) => {
   }
 };
 
+// export const getUserBookings = async (req, res) => {
+//   try {
+//     const user = req.user._id;
+//     const bookings = await Booking.find({ user })
+//       .populate("room hotel")
+//       .sort({ createdAt: -1 });
+//     res.json({ success: true, bookings });
+//   } catch (error) {
+//     res.json({
+//       success: false,
+//       message: "Failed to fetch user bookings",
+//       error: error.message,
+//     });
+//   }
+// };
+
 //Api to get all bookings of a hotel owner
 //Get/api/bookings/owner
 export const getHotelBookings = async (req, res) => {
   try {
-    const hotel = await Hotel.findOne({ owner: req.auth.userId });
+    const ownerId = req.user._id; // ← FIXED: was req.auth.userId
+    console.log("Looking for hotel with owner:", ownerId);
+    const hotel = await Hotel.findOne({ owner: ownerId });
+    console.log("Hotel found:", hotel);
     if (!hotel) {
       return res.json({ success: false, message: "No hotel found " });
     }
@@ -206,3 +203,74 @@ export const getHotelBookings = async (req, res) => {
     });
   }
 };
+
+//payment confirmation
+export const paystackPayment = async (req, res) => {
+  try {
+    const { bookingId } = req.body;
+
+    const booking = await Booking.findById(bookingId);
+    const roomData = await Room.findById(booking.room).populate("hotel");
+    const totalPrice = booking.totalPrice;
+    const { origin } = req.headers;
+
+    const response = await axios.post(
+      "https://api.paystack.co/transaction/initialize",
+      {
+        email: req.user.email,
+        amount: totalPrice * 100, // Paystack uses kobo
+        metadata: {
+          bookingId,
+        },
+        callback_url: `${origin}/payment-success`,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
+          "Content-Type": "application/json",
+        },
+      },
+    );
+
+    res.json({
+      success: true,
+      url: response.data.data.authorization_url,
+    });
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: "Payment initialization failed" });
+  }
+};
+
+// const paystackInstance = new PaystackService(
+//   process.env.PAYSTACK_SECRET_KEY,
+// );
+
+// const line_items = [
+//   {
+//     price_data: {
+//       currency: "naira",
+//       product_data: {
+//         name: roomData.hotel.name,
+//       },
+//       unit_amount: totalPrice * 100,
+//     },
+//     quantity: 1,
+//   },
+// ];
+
+//create Checkout session
+// const session = await paystackInstance.checkOut.sessions.create({
+//   line_items,
+//   mode: "payment",
+//   success_url: `${origin}/loader/my-bookings`,
+//   cancel_url: `${origin}/my-bookings`,
+//   metadata: {
+//     bookingId,
+//   },
+// });
+// res.json({ success: true, url: session.url });
+//   } catch (error) {
+//     res.json({ success: false, message: "Payment failed" });
+//   }
+// };

@@ -14,7 +14,14 @@ connectDB();
 connectCloudinary();
 
 const app = express();
-app.use(cors()); // Enable Cross-Origin Resource Sharing
+
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  }),
+);
+// app.use(cors()); // Enable Cross-Origin Resource Sharing
 
 // middleware
 app.use(express.json());

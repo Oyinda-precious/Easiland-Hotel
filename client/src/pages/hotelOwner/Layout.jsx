@@ -5,13 +5,26 @@ import { Outlet } from 'react-router-dom'
 import { useAppContext } from '../../context/AppContext'
 
 const Layout = () => {
-  const {isOwner, navigate} = useAppContext()
+  const { isOwner, navigate, user, userLoading } = useAppContext()
 
-  useEffect(()=>{
-    if (!isOwner) {
+  useEffect(() => {
+    if (!userLoading && user && !isOwner) {
       navigate('/')
     }
-  }, [isOwner])
+  }, [isOwner, user, userLoading])
+
+  // Show nothing while user data is still loading
+  if (userLoading) return null
+
+  // const {isOwner, navigate} = useAppContext()
+
+  // useEffect(()=>{
+  //   if (!isOwner) {
+  //     navigate('/')
+  //   }
+  // }, [isOwner])
+
+
 
   return (
     <div className='flex flex-col h-screen'>

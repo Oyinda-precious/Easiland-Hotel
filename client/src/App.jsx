@@ -26,7 +26,7 @@ const App = () => {
   return (
     <GuestAuthProvider>
       <div>
-        <Toaster />
+        <Toaster position="top-right" />
         {/* Only show public Navbar on non-owner pages */}
         {!isOwnerPath && <Navbar />}
 

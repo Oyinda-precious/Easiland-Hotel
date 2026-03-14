@@ -86,11 +86,12 @@ const AddRoom = () => {
     }
    
   return (
+    
     <form onSubmit={onSubmitHandler}>
         <Title align='left' font='outfit'  title='Add Room' 
         subTitle='Fill in the details carefully and accurate room details, 
         pricing and amenities, to enhance the user booking experience.'/>
-
+        
         {/* Upload Area For Images. */}
         <p className='text-gray-800 mt-5'>Images</p>
         <div className='grid grid-cols-2 sm:flex gap-4 my-2 flex-wrap'>
@@ -141,10 +142,20 @@ const AddRoom = () => {
                 </div>
             ))}
         </div>
-        <button className='bg-primary text-white px-5 py-2 rounded 
-        mt-8 cursor-pointer' disabled={loading}>
-           {loading ? 'Adding...' : 'Add Room'}
-        </button>
+        {/* //loading state for button */}
+       <button className='bg-primary text-white px-5 py-2 rounded 
+mt-8 cursor-pointer flex items-center gap-2' disabled={loading}>
+  {loading ? (
+    <>
+      <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"/>
+      </svg>
+      Adding...
+    </>
+  ) : 'Add Room'}
+</button>
+        
     </form>
   )
 }

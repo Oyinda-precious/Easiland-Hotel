@@ -98,7 +98,7 @@ export const createBooking = async (req, res) => {
               <li><strong>Check-In:</strong> ${new Date(booking.checkInDate).toDateString()}</li>
               <li><strong>Check-Out:</strong> ${new Date(booking.checkOutDate).toDateString()}</li>
               <li><strong>Guests:</strong> ${booking.guests}</li>
-              <li><strong>Total Amount:</strong> $${booking.totalPrice}</li>
+              <li><strong>Total Amount:</strong>  ₦${booking.totalPrice}</li>
             </ul>
             <p>We look forward to hosting you!</p>
           </div>

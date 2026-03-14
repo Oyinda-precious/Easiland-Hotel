@@ -166,7 +166,7 @@ const RoomDetails = () => {
             ))}
           </div>
         </div>
-        <p className="text-2xl font-medium">${room?.pricePerNight}/night</p>
+        <p className="text-2xl font-medium">₦{room?.pricePerNight.toLocaleString()}/night</p>
       </div>
 
       {/* Booking Form */}

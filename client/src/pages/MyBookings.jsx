@@ -108,7 +108,7 @@ const MyBookings = () => {
                     <img src={assets.guestsIcon} alt="" />
                     <span>Guests: {booking.guests}</span>
                   </div>
-                  <p className="font-medium">Total: ${booking.totalPrice}</p>
+                  <p className="font-medium">Total: ₦{booking.totalPrice?.toLocaleString()}</p>
                 </div>
               </div>
 

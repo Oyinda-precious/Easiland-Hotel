@@ -9,27 +9,21 @@ const Layout = () => {
   const [isReady, setIsReady] = useState(false)
 
   useEffect(() => {
-    // Wait until userLoading is fully done
     if (userLoading) return
 
     if (!user) {
-      // Not logged in at all → go to owner login
       navigate('/owner/login')
       return
     }
 
     if (user && !isOwner) {
-      // Logged in but not an owner → go home
       navigate('/')
       return
     }
 
-    // User is logged in AND is owner → show dashboard
     setIsReady(true)
-
   }, [isOwner, user, userLoading])
 
-  // Show a clean loading screen while checking auth
   if (!isReady) {
     return (
       <div className='flex items-center justify-center h-screen'>
@@ -42,11 +36,14 @@ const Layout = () => {
   }
 
   return (
-    <div className='flex flex-col h-screen'>
+    // overflow-hidden on outer prevents footer bleeding in
+    <div className='flex flex-col h-screen overflow-hidden'>
       <Navbartwo />
-      <div className='flex h-full'>
+      {/* flex-1 and min-h-0 allow inner scroll to work correctly */}
+      <div className='flex flex-1 min-h-0'>
         <Sidebar />
-        <div className='flex-1 p-4 pt-10 md:px-10 h-full overflow-y-auto'>
+        {/* This div scrolls independently — footer never shows here */}
+        <div className='flex-1 p-4 pt-10 md:px-10 overflow-y-auto'>
           <Outlet />
         </div>
       </div>

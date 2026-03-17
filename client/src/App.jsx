@@ -17,6 +17,7 @@ import { Toaster } from "react-hot-toast";
 import { useAppContext } from "./context/AppContext";
 import Loader from "./components/Loader";
 import PaymentSuccess from "./pages/PaymentSuccess";
+import About from "./components/About";
 import { GuestAuthProvider } from "./context/GuestAuthContext";
 
 const App = () => {
@@ -39,6 +40,7 @@ const App = () => {
             <Route path="/my-bookings" element={<MyBookings />} />
             <Route path="/loader/:nextUrl" element={<Loader />} />
             <Route path="/payment-success" element={<PaymentSuccess />} />
+            <Route path="/about" element={<About />} />
 
             {/* Guest Auth Routes */}
             <Route path="/login" element={<GuestLogin />} />

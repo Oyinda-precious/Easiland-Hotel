@@ -1,15 +1,16 @@
 import React from 'react'
 import { assets } from '../assets/assets'
 
+
 const Footer = () => {
   return (
     <div className='bg-[#F6F9FC]text-gray-500/80 pt-8 px-4 md:px-16 lg:px-24 xl:px-32'>
             <div className='flex flex-wrap justify-between gap-12 md:gap-6'>
                 <div className='max-w-80'>
-                    <img src={assets.logo} alt="logo" className='mb-4 h-8 md:h-9 invert opacity-80' />
+                    {/* <img src={assets.logo} alt="logo" className='mb-4 h-8 md:h-9 invert opacity-80' /> */}
                     <p className='text-sm'>
-                        Discover the worl's most extraordinary places to stay. from boutique hotles 
-                        to luxury villas and private islands
+                        Experience the comfort of exceptional hospitality with Easiland Hotel, 
+                        where every stay is designed to be relaxing, memorable, and effortless.
                     </p>
                     <div className='flex items-center gap-3 mt-4'>
                        
@@ -32,8 +33,10 @@ const Footer = () => {
                     </ul>
                 </div>
 
+                    
                 <div>
                     <p className='text-lg text-gray-800'>SUPPORT</p>
+                    
                     <ul className='mt-3 flex flex-col gap-2 text-sm'>
                         <li><a href="#">Help Center</a></li>
                         <li><a href="#">Safety Information</a></li>
@@ -41,6 +44,7 @@ const Footer = () => {
                         <li><a href="#">Contact Us</a></li>
                         <li><a href="#">Accessibility</a></li>
                     </ul>
+                
                 </div>
 
                 <div className='max-w-80'>

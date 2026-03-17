@@ -55,12 +55,12 @@ const AllRooms = () => {
     'Family Suite',
   ]
 
-  const priceRanges = [
-    '0 to 500',
-    '500 to 1000',
-    '1000 to 2000',
-    '2000 to 3000',
-  ]
+  // const priceRanges = [
+  //   '0 to 500',
+  //   '500 to 1000',
+  //   '1000 to 2000',
+  //   '2000 to 3000',
+  // ]
 
   const sortOptions = [
     'Price: Low to High',
@@ -248,7 +248,7 @@ const clearFilters = ()=>{
                 ))}
               </div>
               <p className="text-xl font-medium text-gray-700">
-           ${room?.pricePerNight ?? 0} / night
+           ₦{room?.pricePerNight.toLocaleString() ?? 0} / night
             </p>
               {/* <p className="text-xl font-medium text-gray-700">
                 ${room.pricePerNight} / night
@@ -287,11 +287,16 @@ const clearFilters = ()=>{
 
           <div className="px-5 pt-5">
             <p className="font-medium text-gray-800 pb-2">Price Range</p>
-            {priceRanges.map((range, index) => (
-              <CheckBox key={index} label={`${currency} ${range}`} 
-              selected={selectedFilters.priceRange.includes(range)}
-              onChange={(checked)=>handleFilterChange(checked, range, 'priceRange')} />
-            ))}
+           {[
+  { label: '₦0 to ₦50,000', value: '0 to 50000' },
+  { label: '₦50,000 to ₦100,000', value: '50000 to 100000' },
+  { label: '₦100,000 to ₦200,000', value: '100000 to 200000' },
+  { label: '₦200,000 and above', value: '200000 to 999999999' },
+].map((range, index) => (
+  <CheckBox key={index} label={range.label}
+  selected={selectedFilters.priceRange.includes(range.value)}
+  onChange={(checked)=>handleFilterChange(checked, range.value, 'priceRange')} />
+))}
           </div>
 
           <div className="px-5 pt-5 pb-7">

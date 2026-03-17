@@ -75,7 +75,9 @@ const RoomDetails = () => {
       );
 
       if (data.success) {
-        toast.success(data.message);
+        toast.success("Booking confirmed! 🎉 Check your email for details.", {
+    duration: 10000, // shows for 10 seconds
+        });
         navigate("/my-bookings");
         scrollTo(0, 0);
       } else {

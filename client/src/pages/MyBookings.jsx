@@ -13,7 +13,9 @@ const MyBookings = () => {
 
   const [bookings, setBookings] = useState([]);
   const [loadingPayment, setLoadingPayment] = useState(null);
+  const [cancelLoading, setCancelLoading] = useState(null);
 
+  // ── Fetch guest bookings ──
   const fetchUserBookings = async () => {
     try {
       const token = getGuestToken();
@@ -31,6 +33,7 @@ const MyBookings = () => {
     }
   };
 
+  // ── Pay Now ──
   const handlePayment = async (bookingId) => {
     try {
       setLoadingPayment(bookingId);
@@ -52,6 +55,32 @@ const MyBookings = () => {
     }
   };
 
+  // ── Cancel Booking ──
+  const handleCancel = async (bookingId) => {
+    // Ask for confirmation first
+    if (!window.confirm("Are you sure you want to cancel this booking? This cannot be undone.")) return;
+
+    try {
+      setCancelLoading(bookingId);
+      const token = getGuestToken();
+      const { data } = await axios.delete(
+        `/api/bookings/cancel/${bookingId}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      if (data.success) {
+        toast.success("Booking cancelled successfully");
+        // Remove cancelled booking from list instantly
+        setBookings(prev => prev.filter(b => b._id !== bookingId));
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error("Failed to cancel booking");
+    } finally {
+      setCancelLoading(null);
+    }
+  };
+
   useEffect(() => {
     if (!guestUser) {
       navigate("/login");
@@ -69,16 +98,28 @@ const MyBookings = () => {
       />
 
       <div className="max-w-6xl mt-8 w-full text-gray-800">
+
+        {/* Table Header */}
         <div className="hidden md:grid md:grid-cols-[3fr_2fr_1fr] w-full border-b border-gray-300 font-medium text-base py-3">
           <div>Hotels</div>
           <div>Date & Timings</div>
           <div>Payment</div>
         </div>
 
+        {/* Empty state */}
         {bookings.length === 0 && (
-          <p className="text-gray-500 mt-10 text-center">No bookings yet.</p>
+          <div className="text-center py-20">
+            <p className="text-gray-400 text-lg">No bookings yet.</p>
+            <button
+              onClick={() => navigate("/rooms")}
+              className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-full text-sm hover:bg-blue-700 transition"
+            >
+              Browse Rooms
+            </button>
+          </div>
         )}
 
+        {/* Bookings list */}
         {bookings.map((booking) => {
           if (!booking.room) return null;
           return (
@@ -108,7 +149,9 @@ const MyBookings = () => {
                     <img src={assets.guestsIcon} alt="" />
                     <span>Guests: {booking.guests}</span>
                   </div>
-                  <p className="font-medium">Total: ₦{booking.totalPrice?.toLocaleString()}</p>
+                  <p className="font-medium">
+                    Total: ₦{booking.totalPrice?.toLocaleString()}
+                  </p>
                 </div>
               </div>
 
@@ -128,25 +171,49 @@ const MyBookings = () => {
                 </div>
               </div>
 
-              {/* Payment */}
+              {/* Payment + Actions */}
               <div className="flex flex-col items-start justify-center pt-3">
+
+                {/* Payment status indicator */}
                 <div className="flex items-center gap-2">
-                  <div
-                    className={`h-3 w-3 rounded-full ${booking.isPaid ? "bg-green-500" : "bg-red-500"}`}
-                  />
+                  <div className={`h-3 w-3 rounded-full ${booking.isPaid ? "bg-green-500" : "bg-red-500"}`} />
                   <p className={`text-sm ${booking.isPaid ? "text-green-500" : "text-red-500"}`}>
                     {booking.isPaid ? "Paid" : "Unpaid"}
                   </p>
                 </div>
+
+                {/* Action buttons - only for unpaid bookings */}
                 {!booking.isPaid && (
-                  <button
-                    disabled={loadingPayment === booking._id}
-                    onClick={() => handlePayment(booking._id)}
-                    className="px-4 py-1.5 mt-4 text-xs border border-gray-400 rounded-full hover:bg-gray-50 transition-all disabled:opacity-50"
-                  >
-                    {loadingPayment === booking._id ? "Processing..." : "Pay Now"}
-                  </button>
+                  <div className="flex gap-2 mt-4 flex-wrap">
+
+                    {/* Pay Now */}
+                    <button
+                      disabled={loadingPayment === booking._id}
+                      onClick={() => handlePayment(booking._id)}
+                      className="px-4 py-1.5 text-xs border border-gray-400 rounded-full hover:bg-gray-50 transition-all disabled:opacity-50 cursor-pointer"
+                    >
+                      {loadingPayment === booking._id ? "Processing..." : "Pay Now"}
+                    </button>
+
+                    {/* Cancel */}
+                    <button
+                      disabled={cancelLoading === booking._id}
+                      onClick={() => handleCancel(booking._id)}
+                      className="px-4 py-1.5 text-xs border border-red-400 text-red-500 rounded-full hover:bg-red-50 transition-all disabled:opacity-50 cursor-pointer"
+                    >
+                      {cancelLoading === booking._id ? "Cancelling..." : "Cancel"}
+                    </button>
+
+                  </div>
                 )}
+
+                {/* Paid bookings show contact message */}
+                {booking.isPaid && (
+                  <p className="text-xs text-gray-400 mt-2">
+                    Contact us to modify this booking
+                  </p>
+                )}
+
               </div>
             </div>
           );

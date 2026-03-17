@@ -1,7 +1,7 @@
 import GuestUser from "../models/GuestUser.js";
 import jwt from "jsonwebtoken";
 import { OAuth2Client } from "google-auth-library";
-import resend from "../configs/resend.js";
+// import resend from "../configs/resend.js";
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
@@ -16,27 +16,27 @@ const generateOTP = () => {
 };
 
 // Send OTP email via Resend
-const sendOTPEmail = async (email, name, otp) => {
-  await resend.emails.send({
-    from: process.env.SENDER_EMAIL,
-    to: email,
-    subject: "Verify Your Email - OTP Code",
-    html: `
-      <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto;">
-        <h2 style="color: #1d4ed8;">Verify Your Email</h2>
-        <p>Dear ${name},</p>
-        <p>Thank you for registering! Use the OTP code below to verify your email address:</p>
-        <div style="background: #f3f4f6; border-radius: 8px; padding: 20px; text-align: center; margin: 24px 0;">
-          <p style="font-size: 36px; font-weight: bold; letter-spacing: 8px; color: #1d4ed8; margin: 0;">
-            ${otp}
-          </p>
-        </div>
-        <p style="color: #6b7280; font-size: 14px;">This code expires in <strong>10 minutes</strong>.</p>
-        <p style="color: #6b7280; font-size: 14px;">If you did not register, please ignore this email.</p>
-      </div>
-    `,
-  });
-};
+// const sendOTPEmail = async (email, name, otp) => {
+//   await resend.emails.send({
+//     from: process.env.SENDER_EMAIL,
+//     to: email,
+//     subject: "Verify Your Email - OTP Code",
+//     html: `
+//       <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto;">
+//         <h2 style="color: #1d4ed8;">Verify Your Email</h2>
+//         <p>Dear ${name},</p>
+//         <p>Thank you for registering! Use the OTP code below to verify your email address:</p>
+//         <div style="background: #f3f4f6; border-radius: 8px; padding: 20px; text-align: center; margin: 24px 0;">
+//           <p style="font-size: 36px; font-weight: bold; letter-spacing: 8px; color: #1d4ed8; margin: 0;">
+//             ${otp}
+//           </p>
+//         </div>
+//         <p style="color: #6b7280; font-size: 14px;">This code expires in <strong>10 minutes</strong>.</p>
+//         <p style="color: #6b7280; font-size: 14px;">If you did not register, please ignore this email.</p>
+//       </div>
+//     `,
+//   });
+// };
 
 // ─────────────────────────────────────────────
 // POST /api/guest/register

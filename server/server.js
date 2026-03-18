@@ -16,30 +16,15 @@ connectCloudinary();
 
 const app = express();
 
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      // Allow localhost and any vercel.app URL for your project
-      const allowedOrigins = [
-        "http://localhost:5173",
-        "https://easiland-hotel-kzbz.vercel.app",
-      ];
+// app.use(
+//   cors({
+//     origin: ["http://localhost:5173", "https://easiland-hotel-kzbz.vercel.app"],
+//     credentials: true,
+//   }),
+// );
 
-      // Allow any Vercel preview URL for your project
-      if (
-        !origin ||
-        allowedOrigins.includes(origin) ||
-        origin.includes("oyindamolas-projects") ||
-        origin.includes("easiland-hotel-kzbz")
-      ) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: true,
-  }),
-);
+// Replace your entire cors block with this:
+app.use(cors());
 
 app.use(express.json());
 

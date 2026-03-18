@@ -16,15 +16,15 @@ connectCloudinary();
 
 const app = express();
 
-// app.use(
-//   cors({
-//     origin: ["http://localhost:5173", "https://easiland-hotel-kzbz.vercel.app"],
-//     credentials: true,
-//   }),
-// );
+app.use(
+  cors({
+    origin: ["http://localhost:5173", "https://easiland-hotel-kzbz.vercel.app"],
+    credentials: true,
+  }),
+);
 
 // Replace your entire cors block with this:
-app.use(cors());
+// app.use(cors());
 
 app.use(express.json());
 

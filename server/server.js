@@ -16,19 +16,14 @@ connectCloudinary();
 
 const app = express();
 
-// app.use(
-//   cors({
-//     origin: "http://localhost:5173",
-//     credentials: true,
-//   }),
-// );
-
 app.use(
   cors({
     origin: ["http://localhost:5173", "https://easiland-hotel-kzbz.vercel.app"],
     credentials: true,
   }),
 );
+
+app.use(express.json());
 
 app.use(clerkMiddleware());
 
@@ -38,8 +33,8 @@ app.use("/api/clerk", clerkWebhooks);
 app.get("/", (req, res) => res.send("API is running"));
 
 // Routes
-app.use("/api/user", userRouter); // Clerk owner routes
-app.use("/api/guest", guestAuthRouter); // Guest custom auth (NEW)
+app.use("/api/user", userRouter);
+app.use("/api/guest", guestAuthRouter);
 app.use("/api/hotels", hotelRouter);
 app.use("/api/rooms", roomRouter);
 app.use("/api/bookings", bookingRouter);

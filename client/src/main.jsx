@@ -23,7 +23,9 @@ if (!GOOGLE_CLIENT_ID) {
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
+    <ClerkProvider publishableKey={PUBLISHABLE_KEY} 
+    afterSignOutUrl="/"
+     allowedRedirectOrigins={['https://easiland-hotel-kzbz.vercel.app']}>
       <BrowserRouter>
         <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
           <AppProvider>

@@ -55,7 +55,7 @@ const AddRoom = () => {
             })
 
             const {data} = await axios.post('/api/rooms', formData, 
-                {headers: {Authorization: `Bearer ${await getToken()}`}})
+            {headers: {Authorization: `Bearer ${getToken()}`}})
 
                 if (data.success) {
                     toast.success(data.message)

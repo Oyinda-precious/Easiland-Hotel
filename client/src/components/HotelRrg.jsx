@@ -17,8 +17,8 @@ const HotelRrg = () => {
 
     try {
         event.preventDefault();
-        const {data} = await axios.post(`http://localhost:3000/api/hotels`, {name, contact, address, city}, 
-            {headers: {Authorization: `Bearer ${await getToken()}`}})
+        const {data} = await axios.post(`api/hotels`, {name, contact, address, city}, 
+            {headers: {Authorization: `Bearer ${getToken()}`}})
         
             if (data.success) {
                 toast.success(data.message)
@@ -31,38 +31,7 @@ const HotelRrg = () => {
           toast.error(error.response?.data?.message || error.message)
     }
    }
-// const onSubmitHandler = async (event) => {
-//   event.preventDefault();
 
-//   const token = await getToken();
-
-//   if (!token) {
-//     toast.error("Please sign in first");
-//     return;
-//   }
-
-//   try {
-//     const { data } = await axios.post(
-//       "http://localhost:3000/api/hotels",
-//       { name, contact, address, city },
-//       {
-//         headers: {
-//           Authorization: `Bearer ${token}`,
-//         },
-//       }
-//     );
-
-//     if (data.success) {
-//       toast.success(data.message);
-//       setIsOwner(true);
-//       setShowHotelReg(false);
-//     } else {
-//       toast.error(data.message);
-//     }
-//   } catch (error) {
-//     toast.error(error.response?.data?.message || error.message);
-//   }
-// };
 
   return (
     <div onClick={()=>setShowHotelReg(false)} className='fixed top-0 bottom-0 left-0 right-0  z-100 flex items-center justify-center bg-black/70'>

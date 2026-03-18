@@ -28,9 +28,7 @@ const App = () => {
     <GuestAuthProvider>
       <div>
         <Toaster position="top-right" />
-        {/* Only show public Navbar on non-owner pages */}
         {!isOwnerPath && <Navbar />}
-
         <div className="min-h-[70vh]">
           <Routes>
             {/* Public Routes */}
@@ -46,7 +44,7 @@ const App = () => {
             <Route path="/login" element={<GuestLogin />} />
             <Route path="/register" element={<GuestRegister />} />
 
-            {/* Owner Routes - Clerk protected */}
+            {/* Owner Routes */}
             <Route path="/owner/login" element={<OwnerLogin />} />
             <Route path="/owner" element={<Layout />}>
               <Route index element={<Dashboard />} />
@@ -55,7 +53,6 @@ const App = () => {
             </Route>
           </Routes>
         </div>
-
         <Footer />
       </div>
     </GuestAuthProvider>

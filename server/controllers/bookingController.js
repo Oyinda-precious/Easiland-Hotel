@@ -321,11 +321,13 @@ export const cancelBooking = async (req, res) => {
 export const paystackPayment = async (req, res) => {
   try {
     const { bookingId } = req.body;
-
     const booking = await Booking.findById(bookingId);
     const totalPrice = booking.totalPrice;
-    const { origin } = req.headers;
     const userEmail = req.guestUser.email;
+
+    // ✅ Use env variable instead of origin header
+    const frontendUrl =
+      process.env.FRONTEND_URL || "https://easiland-hotel.vercel.app";
 
     const response = await axios.post(
       "https://api.paystack.co/transaction/initialize",
@@ -333,7 +335,7 @@ export const paystackPayment = async (req, res) => {
         email: userEmail,
         amount: totalPrice * 100,
         metadata: { bookingId },
-        callback_url: `${origin}/payment-success`,
+        callback_url: `${frontendUrl}/payment-success`,
       },
       {
         headers: {
@@ -349,3 +351,35 @@ export const paystackPayment = async (req, res) => {
     res.json({ success: false, message: "Payment initialization failed" });
   }
 };
+
+// export const paystackPayment = async (req, res) => {
+//   try {
+//     const { bookingId } = req.body;
+
+//     const booking = await Booking.findById(bookingId);
+//     const totalPrice = booking.totalPrice;
+//     const { origin } = req.headers;
+//     const userEmail = req.guestUser.email;
+
+//     const response = await axios.post(
+//       "https://api.paystack.co/transaction/initialize",
+//       {
+//         email: userEmail,
+//         amount: totalPrice * 100,
+//         metadata: { bookingId },
+//         callback_url: `${origin}/payment-success`,
+//       },
+//       {
+//         headers: {
+//           Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
+//           "Content-Type": "application/json",
+//         },
+//       },
+//     );
+
+//     res.json({ success: true, url: response.data.data.authorization_url });
+//   } catch (error) {
+//     console.log(error);
+//     res.json({ success: false, message: "Payment initialization failed" });
+//   }
+// };

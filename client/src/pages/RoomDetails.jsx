@@ -48,46 +48,48 @@ const RoomDetails = () => {
   };
 
   // Submit handler - check login before booking
-  const onSubmitHandler = async (e) => {
-    e.preventDefault();
+ const onSubmitHandler = async (e) => {
+  e.preventDefault();
 
-    // If not checked availability yet, do that first
-    if (!isAvailable) {
-      return checkAvailability();
+  if (!isAvailable) {
+    return checkAvailability();
+  }
+
+  if (!guestUser) {
+    toast.error("Please login to book a room");
+    localStorage.setItem("redirectAfterLogin", `/rooms/${id}`);
+    navigate("/login");
+    return;
+  }
+
+  try {
+    const token = getGuestToken();
+
+    const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/bookings/book`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+      body: JSON.stringify({ roomId: id, checkInDate, checkOutDate, guests })
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+      toast.success("Booking confirmed! 🎉 Check your email for details.", {
+        duration: 10000,
+      });
+      navigate("/my-bookings");
+      scrollTo(0, 0);
+    } else {
+      toast.error(data.message);
     }
-
-    // Must be logged in to book
-    if (!guestUser) {
-      toast.error("Please login to book a room");
-      // Save current page to redirect back after login
-      localStorage.setItem("redirectAfterLogin", `/rooms/${id}`);
-      navigate("/login");
-      return;
-    }
-
-    try {
-      const token = getGuestToken();
-
-      const { data } = await axios.post(
-        "/api/bookings/book",
-        { roomId: id, checkInDate, checkOutDate, guests },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-
-      if (data.success) {
-        toast.success("Booking confirmed! 🎉 Check your email for details.", {
-    duration: 10000, // shows for 10 seconds
-        });
-        navigate("/my-bookings");
-        scrollTo(0, 0);
-      } else {
-        toast.error(data.message);
-      }
-    } catch (error) {
-      console.log(error);
-      toast.error("Error booking room");
-    }
-  };
+  } catch (error) {
+    console.log(error);
+    toast.error("Error booking room");
+  }
+};
 
   useEffect(() => {
     if (!Array.isArray(rooms) || rooms.length === 0) return;

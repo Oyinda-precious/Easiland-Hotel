@@ -5,6 +5,25 @@ import { toast } from "react-hot-toast";
 
 axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL;
 
+
+// ✅ Auto-attach token to every request
+axios.interceptors.request.use((config) => {
+  const token = localStorage.getItem("ownerToken");
+  // ✅ Only attach if no Authorization header already set
+  if (token && !config.headers.Authorization) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+// axios.interceptors.request.use((config) => {
+//   const token = localStorage.getItem("ownerToken");
+//   if (token) {
+//     config.headers.Authorization = `Bearer ${token}`;
+//   }
+//   return config;
+// });
+
 const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
@@ -39,25 +58,63 @@ export const AppProvider = ({ children }) => {
 
   // Fetch logged-in owner user data
   const fetchUser = async () => {
-    try {
-      const token = getToken();
-      if (!token) {
-        setUserLoading(false);
-        return;
-      }
-      const { data } = await axios.get("/api/user", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (data.success) {
-        setIsOwner(data.role === "hotelOwner");
-        setsearchedCities(data.recentSearchedCities || []);
-      }
-    } catch (error) {
-      console.log("fetchUser error:", error.message);
-    } finally {
+  try {
+    const token = getToken();
+    if (!token) {
       setUserLoading(false);
+      return;
     }
-  };
+
+    // Verify token is valid by decoding it first
+    const { data } = await axios.get("/api/auth/me", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    if (data.success) {
+      setOwnerUser(data.user);
+      setIsOwner(data.user.role === "hotelOwner");
+      setsearchedCities(data.user.recentSearchedCities || []);
+    } else {
+      // Token invalid — clear it
+      localStorage.removeItem("ownerToken");
+      localStorage.removeItem("ownerUser");
+      setIsOwner(false);
+      setOwnerUser(null);
+    }
+  } catch (error) {
+    console.log("fetchUser error:", error.message);
+    localStorage.removeItem("ownerToken");
+    localStorage.removeItem("ownerUser");
+    setIsOwner(false);
+    setOwnerUser(null);
+  } finally {
+    setUserLoading(false);
+  }
+};
+
+
+
+
+  // const fetchUser = async () => {
+  //   try {
+  //     const token = getToken();
+  //     if (!token) {
+  //       setUserLoading(false);
+  //       return;
+  //     }
+  //     const { data } = await axios.get("/api/user", {
+  //       headers: { Authorization: `Bearer ${token}` },
+  //     });
+  //     if (data.success) {
+  //       setIsOwner(data.role === "hotelOwner");
+  //       setsearchedCities(data.recentSearchedCities || []);
+  //     }
+  //   } catch (error) {
+  //     console.log("fetchUser error:", error.message);
+  //   } finally {
+  //     setUserLoading(false);
+  //   }
+  // };
 
   // Logout owner
   const logoutOwner = () => {
@@ -68,9 +125,14 @@ export const AppProvider = ({ children }) => {
     navigate("/owner/login");
   };
 
-  useEffect(() => {
-    fetchUser();
-  }, [ownerUser]);
+  // useEffect(() => {
+  //   fetchUser();
+  // }, [ownerUser]);
+
+
+useEffect(() => {
+  fetchUser();
+}, []);
 
   useEffect(() => {
     fetchRooms();

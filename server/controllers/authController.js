@@ -143,3 +143,23 @@ export const googleLogin = async (req, res) => {
     res.json({ success: false, message: "Google login failed" });
   }
 };
+
+// ─── GET ME ──────────────────────────────────────────────
+export const getMe = async (req, res) => {
+  try {
+    const user = req.user; // set by protect middleware
+    res.json({
+      success: true,
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+        image: user.image,
+        role: user.role,
+        recentSearchedCities: user.recentSearchedCities || [],
+      },
+    });
+  } catch (error) {
+    res.json({ success: false, message: "Failed to get user" });
+  }
+};

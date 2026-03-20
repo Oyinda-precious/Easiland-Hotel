@@ -220,7 +220,7 @@ export const getUserBookings = async (req, res) => {
 };
 
 // ─────────────────────────────────────────────
-// GET /api/bookings/hotel (Clerk owner - dashboard)
+// GET /api/bookings/hotel ( owner - dashboard)
 // ─────────────────────────────────────────────
 export const getHotelBookings = async (req, res) => {
   try {
@@ -233,22 +233,27 @@ export const getHotelBookings = async (req, res) => {
       .populate("room hotel")
       .sort({ createdAt: -1 });
 
-    // Manually fetch user from either GuestUser or Clerk User
+    // ✅ Fetch user from GuestUser OR User model
     const populatedBookings = await Promise.all(
       bookings.map(async (booking) => {
         const bookingObj = booking.toObject();
         const userId = booking.user?.toString();
         let user = null;
 
-        // Clerk IDs start with "user_"
-        if (userId && userId.startsWith("user_")) {
-          user = await User.findById(userId).select("username email image");
-        } else {
-          // GuestUser MongoDB ObjectId
+        if (userId) {
+          // Try GuestUser first (most bookings come from guests)
           try {
             user = await GuestUser.findById(userId).select("name email image");
           } catch (e) {
             user = null;
+          }
+          // If not found in GuestUser, try User model
+          if (!user) {
+            try {
+              user = await User.findById(userId).select("username email image");
+            } catch (e) {
+              user = null;
+            }
           }
         }
 

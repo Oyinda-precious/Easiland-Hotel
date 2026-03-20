@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { assets } from "../assets/assets";
 import { useGuestAuth } from "../context/GuestAuthContext";
-// import Easilandlogo from "./Easilandlogo.png";
+import Easilandlogo from "../assets/Easilandlogo.jpg";
+
 
 
 const Navbar = () => {
@@ -51,7 +52,7 @@ const Navbar = () => {
       
       <Link to="/">
       <img 
-    src="/src/assets/Easilandlogo.jpg" 
+    src={Easilandlogo}
     alt="Easiland Hotel Logo" 
     className="h-12 w-12 rounded-full object-cover"
   />

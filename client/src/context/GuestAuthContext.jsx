@@ -8,7 +8,7 @@ export const GuestAuthProvider = ({ children }) => {
   const [guestUser, setGuestUser] = useState(null);
   const [guestLoading, setGuestLoading] = useState(true);
 
-  // Load guest from localStorage on startup
+  // Load guest from localStorage
   useEffect(() => {
     const token = localStorage.getItem("guestToken");
     const user = localStorage.getItem("guestUser");
@@ -31,7 +31,7 @@ export const GuestAuthProvider = ({ children }) => {
         setGuestUser(data.user);
         return { success: true };
       } else {
-        // Pass back needsVerification flag if applicable
+        
         return {
           success: false,
           message: data.message,
@@ -44,7 +44,7 @@ export const GuestAuthProvider = ({ children }) => {
     }
   };
 
-  // Email + password register (returns success, OTP sent — does NOT log in yet)
+  
   const registerGuest = async (name, email, password) => {
     try {
       const { data } = await axios.post(

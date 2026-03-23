@@ -15,7 +15,7 @@ const MyBookings = () => {
   const [loadingPayment, setLoadingPayment] = useState(null);
   const [cancelLoading, setCancelLoading] = useState(null);
 
-  // ── Fetch guest bookings ──
+  
   const fetchUserBookings = async () => {
     try {
       const token = getGuestToken();
@@ -33,7 +33,7 @@ const MyBookings = () => {
     }
   };
 
-  // ── Pay Now ──
+ 
   const handlePayment = async (bookingId) => {
     try {
       setLoadingPayment(bookingId);
@@ -55,9 +55,9 @@ const MyBookings = () => {
     }
   };
 
-  // ── Cancel Booking ──
+  
   const handleCancel = async (bookingId) => {
-    // Ask for confirmation first
+   
     if (!window.confirm("Are you sure you want to cancel this booking? This cannot be undone.")) return;
 
     try {
@@ -69,7 +69,7 @@ const MyBookings = () => {
       );
       if (data.success) {
         toast.success("Booking cancelled successfully");
-        // Remove cancelled booking from list instantly
+        
         setBookings(prev => prev.filter(b => b._id !== bookingId));
       } else {
         toast.error(data.message);
@@ -99,14 +99,14 @@ const MyBookings = () => {
 
       <div className="max-w-6xl mt-8 w-full text-gray-800">
 
-        {/* Table Header */}
+      
         <div className="hidden md:grid md:grid-cols-[3fr_2fr_1fr] w-full border-b border-gray-300 font-medium text-base py-3">
           <div>Hotels</div>
           <div>Date & Timings</div>
           <div>Payment</div>
         </div>
 
-        {/* Empty state */}
+       
         {bookings.length === 0 && (
           <div className="text-center py-20">
             <p className="text-gray-400 text-lg">No bookings yet.</p>
@@ -119,7 +119,7 @@ const MyBookings = () => {
           </div>
         )}
 
-        {/* Bookings list */}
+       
         {bookings.map((booking) => {
           if (!booking.room) return null;
           return (
@@ -127,7 +127,7 @@ const MyBookings = () => {
               key={booking._id}
               className="grid grid-cols-1 md:grid-cols-[3fr_2fr_1fr] w-full border-b border-gray-300 py-6 first:border-t"
             >
-              {/* Hotel details */}
+              
               <div className="flex flex-col md:flex-row">
                 <img
                   src={booking.room?.images?.[0]}
@@ -155,7 +155,7 @@ const MyBookings = () => {
                 </div>
               </div>
 
-              {/* Dates */}
+             
               <div className="flex flex-row md:items-center md:gap-12 mt-3 gap-8">
                 <div>
                   <p>Check-in:</p>
@@ -171,10 +171,10 @@ const MyBookings = () => {
                 </div>
               </div>
 
-              {/* Payment + Actions */}
+              
               <div className="flex flex-col items-start justify-center pt-3">
 
-                {/* Payment status indicator */}
+               
                 <div className="flex items-center gap-2">
                   <div className={`h-3 w-3 rounded-full ${booking.isPaid ? "bg-green-500" : "bg-red-500"}`} />
                   <p className={`text-sm ${booking.isPaid ? "text-green-500" : "text-red-500"}`}>
@@ -182,11 +182,11 @@ const MyBookings = () => {
                   </p>
                 </div>
 
-                {/* Action buttons - only for unpaid bookings */}
+               
                 {!booking.isPaid && (
                   <div className="flex gap-2 mt-4 flex-wrap">
 
-                    {/* Pay Now */}
+                   
                     <button
                       disabled={loadingPayment === booking._id}
                       onClick={() => handlePayment(booking._id)}
@@ -195,7 +195,7 @@ const MyBookings = () => {
                       {loadingPayment === booking._id ? "Processing..." : "Pay Now"}
                     </button>
 
-                    {/* Cancel */}
+                    
                     <button
                       disabled={cancelLoading === booking._id}
                       onClick={() => handleCancel(booking._id)}
@@ -207,7 +207,7 @@ const MyBookings = () => {
                   </div>
                 )}
 
-                {/* Paid bookings show contact message */}
+               
                 {booking.isPaid && (
                   <p className="text-xs text-gray-400 mt-2">
                     Contact us to modify this booking

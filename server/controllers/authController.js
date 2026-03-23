@@ -5,14 +5,12 @@ import { OAuth2Client } from "google-auth-library";
 
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
-// Generate JWT token
 const generateToken = (userId) => {
   return jwt.sign({ id: userId }, process.env.JWT_SECRET, {
     expiresIn: "7d",
   });
 };
 
-// ─── REGISTER ───────────────────────────────────────────
 export const register = async (req, res) => {
   try {
     const { username, email, password } = req.body;
@@ -52,7 +50,6 @@ export const register = async (req, res) => {
   }
 };
 
-// ─── LOGIN ───────────────────────────────────────────────
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -62,7 +59,6 @@ export const login = async (req, res) => {
       return res.json({ success: false, message: "Invalid email or password" });
     }
 
-    // Google-only users won't have a password
     if (!user.password) {
       return res.json({
         success: false,
@@ -94,12 +90,10 @@ export const login = async (req, res) => {
   }
 };
 
-// ─── GOOGLE LOGIN ─────────────────────────────────────────
 export const googleLogin = async (req, res) => {
   try {
     const { token } = req.body;
 
-    // Verify Google token
     const ticket = await googleClient.verifyIdToken({
       idToken: token,
       audience: process.env.GOOGLE_CLIENT_ID,
@@ -107,7 +101,6 @@ export const googleLogin = async (req, res) => {
 
     const { name, email, picture, sub: googleId } = ticket.getPayload();
 
-    // Find or create user
     let user = await User.findOne({ email });
 
     if (!user) {
@@ -118,7 +111,6 @@ export const googleLogin = async (req, res) => {
         googleId,
       });
     } else {
-      // Update googleId if not set
       if (!user.googleId) {
         user.googleId = googleId;
         await user.save();
@@ -144,7 +136,6 @@ export const googleLogin = async (req, res) => {
   }
 };
 
-// ─── GET ME ──────────────────────────────────────────────
 export const getMe = async (req, res) => {
   try {
     const user = req.user; // set by protect middleware

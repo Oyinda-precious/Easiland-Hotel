@@ -39,10 +39,10 @@ export const AppProvider = ({ children }) => {
     JSON.parse(localStorage.getItem("ownerUser")) || null
   );
 
-  // Get token from localStorage
+ 
   const getToken = () => localStorage.getItem("ownerToken");
 
-  // Fetch all rooms (public)
+  
   const fetchRooms = async () => {
     try {
       const { data } = await axios.get("/api/rooms");
@@ -65,7 +65,7 @@ export const AppProvider = ({ children }) => {
       return;
     }
 
-    // Verify token is valid by decoding it first
+    
     const { data } = await axios.get("/api/auth/me", {
       headers: { Authorization: `Bearer ${token}` },
     });
@@ -75,7 +75,7 @@ export const AppProvider = ({ children }) => {
       setIsOwner(data.user.role === "hotelOwner");
       setsearchedCities(data.user.recentSearchedCities || []);
     } else {
-      // Token invalid — clear it
+     
       localStorage.removeItem("ownerToken");
       localStorage.removeItem("ownerUser");
       setIsOwner(false);
@@ -94,28 +94,6 @@ export const AppProvider = ({ children }) => {
 
 
 
-
-  // const fetchUser = async () => {
-  //   try {
-  //     const token = getToken();
-  //     if (!token) {
-  //       setUserLoading(false);
-  //       return;
-  //     }
-  //     const { data } = await axios.get("/api/user", {
-  //       headers: { Authorization: `Bearer ${token}` },
-  //     });
-  //     if (data.success) {
-  //       setIsOwner(data.role === "hotelOwner");
-  //       setsearchedCities(data.recentSearchedCities || []);
-  //     }
-  //   } catch (error) {
-  //     console.log("fetchUser error:", error.message);
-  //   } finally {
-  //     setUserLoading(false);
-  //   }
-  // };
-
   // Logout owner
   const logoutOwner = () => {
     localStorage.removeItem("ownerToken");
@@ -125,10 +103,7 @@ export const AppProvider = ({ children }) => {
     navigate("/owner/login");
   };
 
-  // useEffect(() => {
-  //   fetchUser();
-  // }, [ownerUser]);
-
+  
 
 useEffect(() => {
   fetchUser();

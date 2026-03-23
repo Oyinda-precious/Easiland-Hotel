@@ -19,21 +19,17 @@ const HotelCard = ({ room, index }) => {
       key={room._id}
       className='relative w-full rounded-xl overflow-hidden bg-white text-gray-500/90 shadow-[0px_4px_4px_rgba(0,0,0,0.05)] flex flex-col'
     >
-      {/* Fixed height image so all cards are same size */}
+      
       <div className='relative h-48 w-full overflow-hidden'>
         <img
           src={room.images[0]}
           alt="room"
           className='w-full h-full object-cover'
         />
-        {/* {index % 2 === 0 && (
-          <p className='px-3 py-1 absolute top-3 left-3 text-xs bg-white text-gray-800 font-medium rounded-full'>
-            Best Seller
-          </p>
-        )} */}
+       
       </div>
 
-      {/* Card content */}
+      
       <div className='p-4 pt-3 flex flex-col flex-1'>
         <div className='flex items-center justify-between'>
           <p className='font-playfair text-lg font-medium text-gray-800 truncate'>
@@ -51,17 +47,7 @@ const HotelCard = ({ room, index }) => {
         </div>
 
         <div className='flex items-center justify-between mt-4'>
-          {/* {showPrice ? (
-            <p className='text-lg font-medium text-gray-800'>
-              {currency}{room?.pricePerNight.toLocaleString()}
-              <span className='text-sm text-gray-500'>/night</span>
-            </p>
-          ) : (
-            <p className='text-sm text-blue-500 font-medium'>
-              View Details →
-            </p>
-          )} */}
-
+        
           <button className='px-4 py-2 text-sm font-medium border border-gray-300 rounded hover:bg-gray-50 transition-all cursor-pointer shrink-0'>
             Book Now
           </button>

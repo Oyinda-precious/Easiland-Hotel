@@ -13,19 +13,19 @@ const GuestLoginPage = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // OTP screen (shown if account not verified)
+  
   const [showOTP, setShowOTP] = useState(false);
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [otpLoading, setOtpLoading] = useState(false);
   const [resendLoading, setResendLoading] = useState(false);
   const [countdown, setCountdown] = useState(0);
 
-  // If already logged in, go home
+  
   useEffect(() => {
     if (guestUser) navigate("/");
   }, [guestUser]);
 
-  // Countdown for resend button
+  
   useEffect(() => {
     if (countdown > 0) {
       const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
@@ -33,7 +33,7 @@ const GuestLoginPage = () => {
     }
   }, [countdown]);
 
-  // ── Login handler ──
+  
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -46,9 +46,9 @@ const GuestLoginPage = () => {
       localStorage.removeItem("redirectAfterLogin");
       navigate(redirect);
     } else if (result.needsVerification) {
-      // Account exists but email not verified
+     
       toast.error("Please verify your email first");
-      // Auto-send a new OTP
+     
       await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/guest/resend-otp`, { email });
       setShowOTP(true);
       setCountdown(60);
@@ -57,7 +57,7 @@ const GuestLoginPage = () => {
     }
   };
 
-  // ── OTP input handlers ──
+ 
   const handleOtpChange = (index, value) => {
     if (!/^\d*$/.test(value)) return;
     const newOtp = [...otp];
@@ -74,7 +74,7 @@ const GuestLoginPage = () => {
     }
   };
 
-  // ── Verify OTP handler ──
+  
   const handleVerifyOTP = async (e) => {
     e.preventDefault();
     const otpString = otp.join("");
@@ -104,7 +104,7 @@ const GuestLoginPage = () => {
     setOtpLoading(false);
   };
 
-  // ── Resend OTP ──
+  
   const handleResendOTP = async () => {
     setResendLoading(true);
     try {
@@ -125,7 +125,7 @@ const GuestLoginPage = () => {
     setResendLoading(false);
   };
 
-  // ── Google login ──
+ 
   const handleGoogleSuccess = async (credentialResponse) => {
     const result = await googleLoginGuest(credentialResponse.credential);
     if (result.success) {
@@ -138,9 +138,7 @@ const GuestLoginPage = () => {
     }
   };
 
-  // ════════════════════════════════════════
-  // OTP SCREEN
-  // ════════════════════════════════════════
+ 
   if (showOTP) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
@@ -210,9 +208,7 @@ const GuestLoginPage = () => {
     );
   }
 
-  // ════════════════════════════════════════
-  // LOGIN SCREEN
-  // ════════════════════════════════════════
+  
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
       <div className="bg-white rounded-2xl shadow-lg p-8 w-full max-w-md">
@@ -223,7 +219,7 @@ const GuestLoginPage = () => {
           </p>
         </div>
 
-        {/* Google Login Button */}
+      
         <div className="flex justify-center mb-6">
           <GoogleLogin
             onSuccess={handleGoogleSuccess}
@@ -234,7 +230,7 @@ const GuestLoginPage = () => {
           />
         </div>
 
-        {/* Divider */}
+        
         <div className="flex items-center gap-3 mb-6">
           <div className="flex-1 h-px bg-gray-200" />
           <span className="text-gray-400 text-sm">or continue with email</span>

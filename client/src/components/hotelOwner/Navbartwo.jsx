@@ -15,7 +15,6 @@ const Navbartwo = () => {
       </Link>
 
       <div className='flex items-center gap-3'>
-        {/* User avatar/initial */}
         <div className='h-9 w-9 rounded-full bg-blue-600 flex items-center 
         justify-center text-white font-medium text-sm'>
           {ownerUser?.username?.charAt(0).toUpperCase() || "O"}

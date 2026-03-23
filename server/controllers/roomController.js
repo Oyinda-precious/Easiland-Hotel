@@ -76,28 +76,12 @@ export const getOwnerRooms = async (req, res) => {
     });
   }
 };
-// export const getOwnerRooms = async (req, res) => {
-//   try {
-//     const hotelData = await Hotel.findOne({ owner: req.user._id });
-//     const rooms = await Room.find({ hotel: hotelData._id.toString() }).populate(
-//       "hotel",
-//     );
-//     res.json({ success: true, rooms });
-//   } catch (error) {
-//     res.json({
-//       success: false,
-//       message: "Error fetching owner rooms",
-//       error: error.message,
-//     });
-//   }
-// };
 
-//API to toggle availability of a room
 export const toggleRoomAvailability = async (req, res) => {
   try {
     const { roomId } = req.body;
 
-    const roomData = await Room.findById(roomId); // ✅ correct model
+    const roomData = await Room.findById(roomId);
 
     if (!roomData) {
       return res.json({ success: false, message: "Room not found" });
@@ -118,22 +102,3 @@ export const toggleRoomAvailability = async (req, res) => {
     });
   }
 };
-
-// export const toggleRoomAvailability = async (req, res) => {
-//   try {
-//     const { roomId } = req.body;
-//     const roomData = await roomId.findById(roomId);
-//     roomData.isAvailable = !roomData.isAvailable;
-//     await roomData.save();
-//     res.json({
-//       success: true,
-//       message: "Room availability updated successfully",
-//     });
-//   } catch (error) {
-//     res.json({
-//       success: false,
-//       message: "Error updating room availability",
-//       error: error.message,
-//     });
-//   }
-// };

@@ -6,7 +6,6 @@ import User from "../models/User.js";
 import GuestUser from "../models/GuestUser.js";
 import axios from "axios";
 
-// ✅ Prevents email timeout from blocking booking response
 const sendEmailWithTimeout = (mailOptions, timeoutMs = 4000) => {
   return Promise.race([
     transporter.sendMail(mailOptions),
@@ -16,9 +15,6 @@ const sendEmailWithTimeout = (mailOptions, timeoutMs = 4000) => {
   ]);
 };
 
-// ─────────────────────────────────────────────
-// Helper: check room availability
-// ─────────────────────────────────────────────
 const checkAvailability = async ({ checkInDate, checkOutDate, room }) => {
   try {
     const bookings = await Booking.find({
@@ -32,9 +28,6 @@ const checkAvailability = async ({ checkInDate, checkOutDate, room }) => {
   }
 };
 
-// ─────────────────────────────────────────────
-// POST /api/bookings/check-availability (public)
-// ─────────────────────────────────────────────
 export const checkAvailabilityAPI = async (req, res) => {
   try {
     const { room, checkInDate, checkOutDate } = req.body;
@@ -49,9 +42,6 @@ export const checkAvailabilityAPI = async (req, res) => {
   }
 };
 
-// ─────────────────────────────────────────────
-// POST /api/bookings/book (guest users)
-// ─────────────────────────────────────────────
 export const createBooking = async (req, res) => {
   try {
     const { roomId, checkInDate, checkOutDate, guests } = req.body;
@@ -91,7 +81,6 @@ export const createBooking = async (req, res) => {
       totalPrice,
     });
 
-    // ── Email 1: Confirmation to GUEST ──
     try {
       await sendEmailWithTimeout({
         from: `"Easiland Hotel" <${process.env.EMAIL_USER}>`,
@@ -129,7 +118,6 @@ export const createBooking = async (req, res) => {
       console.log("Guest email error:", emailError.message);
     }
 
-    // ── Email 2: Notification to OWNER ──
     try {
       const hotelOwner = await User.findById(roomData.hotel.owner);
       const ownerEmail = hotelOwner?.email;
@@ -181,9 +169,6 @@ export const createBooking = async (req, res) => {
   }
 };
 
-// ─────────────────────────────────────────────
-// GET /api/bookings/user (guest users)
-// ─────────────────────────────────────────────
 export const getUserBookings = async (req, res) => {
   try {
     const userId = req.guestUser._id;
@@ -200,9 +185,6 @@ export const getUserBookings = async (req, res) => {
   }
 };
 
-// ─────────────────────────────────────────────
-// GET /api/bookings/hotel (owner - dashboard)
-// ─────────────────────────────────────────────
 export const getHotelBookings = async (req, res) => {
   try {
     const ownerId = req.user._id;
@@ -259,9 +241,6 @@ export const getHotelBookings = async (req, res) => {
   }
 };
 
-// ─────────────────────────────────────────────
-// DELETE /api/bookings/cancel/:bookingId (guest users)
-// ─────────────────────────────────────────────
 export const cancelBooking = async (req, res) => {
   try {
     const { bookingId } = req.params;
@@ -293,9 +272,6 @@ export const cancelBooking = async (req, res) => {
   }
 };
 
-// ─────────────────────────────────────────────
-// POST /api/bookings/paystack-payment (guest users)
-// ─────────────────────────────────────────────
 export const paystackPayment = async (req, res) => {
   try {
     const { bookingId } = req.body;

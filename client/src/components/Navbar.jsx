@@ -48,7 +48,7 @@ const Navbar = () => {
         : "py-4 md:py-6"
       }`}
     >
-      {/* Logo */}
+     
       
       <Link to="/">
       <img 
@@ -58,8 +58,7 @@ const Navbar = () => {
   />
       
       </Link>
-
-      {/* Desktop Nav Links */}
+ 
       <div className="hidden md:flex items-center gap-4 lg:gap-8">
         {navLinks.map((link, i) => (
           <a
@@ -73,7 +72,7 @@ const Navbar = () => {
         ))}
       </div>
 
-      {/* Desktop Right */}
+    
       <div className="hidden md:flex items-center gap-4">
         <img
           src={assets.searchIcon}
@@ -82,7 +81,7 @@ const Navbar = () => {
         />
 
         {guestUser ? (
-          // Logged in guest - show user dropdown
+          
           <div className="relative">
             <button
               onClick={() => setDropdownOpen(!dropdownOpen)}
@@ -115,7 +114,7 @@ const Navbar = () => {
             )}
           </div>
         ) : (
-          // Not logged in - show Login button
+          
           <button
             onClick={() => navigate("/login")}
             className="bg-black text-white px-8 py-2.5 rounded-full ml-4 transition-all duration-500 hover:bg-gray-800"
@@ -125,7 +124,7 @@ const Navbar = () => {
         )}
       </div>
 
-      {/* Mobile Menu Button */}
+    
       <div className="flex items-center gap-3 md:hidden">
         <img
           onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -135,7 +134,7 @@ const Navbar = () => {
         />
       </div>
 
-      {/* Mobile Menu */}
+      
       <div
         className={`fixed top-0 left-0 w-full h-screen bg-white text-base flex flex-col md:hidden items-center justify-center gap-6 font-medium text-gray-800 transition-all duration-500 ${isMenuOpen ? "translate-x-0" : "-translate-x-full"}`}
       >

@@ -86,7 +86,7 @@ const AllRooms = () => {
   }
 
 
-  //function to check if a room matches the selected filters
+  
   const matchesRoomType = (room)=>{
     return selectedFilters.roomType.length === 0 || 
     selectedFilters.roomType.includes(room.roomType)
@@ -124,20 +124,7 @@ const sortRooms = (a, b) => {
 
   return 0;
 };
-// const sortRooms = (a, b) =>{
-// if (selectedSort === 'Price: Low to High') {
-//   return a.pricePerNight - b.pricePerNight;
-// }
-// if (selectedSort === 'Price: High to Low') {
-//   return b.pricePerNight - a.pricePerNight;
-// }
-// if (selectedSort === 'Newest First') {
-//   return new Date(b.createdAt) - new Date(a.createdAt);
-// }
-// return 0;
-// }
 
-//filtere destination
 const filterDestination = (room) => {
   const destination = searchParams.get('destination');
   if (!destination) return true;
@@ -148,7 +135,7 @@ const filterDestination = (room) => {
 }
 
 
-//filter and sort rooms based on selected options
+
 const filteredRooms = useMemo(() => {
   if (!Array.isArray(rooms)) return [];
 
@@ -161,12 +148,7 @@ const filteredRooms = useMemo(() => {
     .sort(sortRooms);
 
 }, [rooms, selectedFilters, selectedSort, searchParams])
-// const filteredRooms = useMemo(()=>{
-//   return rooms.filter(room =>matchesRoomType(room) && matchesPriceRange(room)
-// && filterDestination(room)).sort(sortRooms);
-// },{rooms, selectedFilters, selectedSort, searchParams})
 
-//clear filters
 const clearFilters = ()=>{
   setSelectedFilters({
     roomType: [],
@@ -250,9 +232,7 @@ const clearFilters = ()=>{
               <p className="text-xl font-medium text-gray-700">
            ₦{room?.pricePerNight.toLocaleString() ?? 0} / night
             </p>
-              {/* <p className="text-xl font-medium text-gray-700">
-                ${room.pricePerNight} / night
-              </p> */}
+             
             </div>
           </div>
         ))}

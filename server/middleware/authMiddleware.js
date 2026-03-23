@@ -3,7 +3,6 @@ import User from "../models/User.js";
 
 export const protect = async (req, res, next) => {
   try {
-    // Get token from header
     const authHeader = req.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -17,7 +16,6 @@ export const protect = async (req, res, next) => {
     // Verify token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    // Find user in DB
     const user = await User.findById(decoded.id);
 
     if (!user) {
@@ -35,7 +33,3 @@ export const protect = async (req, res, next) => {
       .json({ success: false, message: "Unauthorized - invalid token" });
   }
 };
-
-// Keep this one we added earlier:
-
-// JWT_SECRET=easiland2025secretjwtkey

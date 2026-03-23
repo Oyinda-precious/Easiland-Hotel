@@ -13,7 +13,6 @@ import { verifyPaystackPayment } from "../controllers/paystackController.js";
 
 const bookingRouter = express.Router();
 
-// Public
 bookingRouter.post("/check-availability", checkAvailabilityAPI);
 
 // Guest routes

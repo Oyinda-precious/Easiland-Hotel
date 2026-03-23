@@ -14,13 +14,7 @@ const FeauturedDestination = () => {
         subTitle='Discover our handpicked selection of exceptional properties around the world, offering unparalled luxury and unforgettable experiences.'
       />
 
-      {/* 
-        Grid layout:
-        - Mobile (< md): 1 card per row
-        - Tablet (md): 2 cards per row  
-        - Desktop (lg+): 4 cards per row — all in one line
-        Each card has the same fixed width so they align perfectly
-      */}
+      
       <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-20 w-full'>
         {rooms.slice(0, 4).map((room, index) => (
           <HotelCard key={room._id} room={room} index={index} />

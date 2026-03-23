@@ -6,9 +6,6 @@ export const registerHotel = async (req, res) => {
     const { name, address, contact, city } = req.body;
     const owner = req.user._id;
 
-    //Check if user already registered9if i want to register multiple times,
-    //  i need to remove this code here, "hotel already registered"
-
     const hotel = await Hotel.findOne({ owner });
     if (hotel) {
       return res.json({ success: false, message: "Hotel already registered" });

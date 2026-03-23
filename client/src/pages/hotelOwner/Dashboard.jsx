@@ -5,7 +5,7 @@ import { useAppContext } from "../../context/AppContext";
 import { toast } from "react-hot-toast";
 
 const Dashboard = () => {
-  // ✅ Removed useUser from Clerk
+  
   const { currency, axios, getToken } = useAppContext();
 
   const [dashboardData, setDashboardData] = useState({
@@ -23,7 +23,7 @@ const Dashboard = () => {
     if (data.success) {
       setDashboardData(data.dashboardData);
     } else {
-      // ✅ Don't toast error if just no data yet — set empty state
+      
       setDashboardData({ bookings: [], totalBookings: 0, totalRevenue: 0 });
     }
   } catch (error) {
@@ -31,21 +31,7 @@ const Dashboard = () => {
   }
 };
 
-  // const fetchDashboardData = async () => {
-  //   try {
-  //     const token = getToken(); // ✅ now gets from localStorage
-  //     const { data } = await axios.get("/api/bookings/hotel", {
-  //       headers: { Authorization: `Bearer ${token}` },
-  //     });
-  //     if (data.success) {
-  //       setDashboardData(data.dashboardData);
-  //     } else {
-  //       toast.error(data.message);
-  //     }
-  //   } catch (error) {
-  //     toast.error("Error fetching dashboard data");
-  //   }
-  // };
+  
 
   useEffect(() => {
     fetchDashboardData();

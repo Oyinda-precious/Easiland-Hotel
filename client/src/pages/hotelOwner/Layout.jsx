@@ -36,13 +36,13 @@ const Layout = () => {
   }
 
   return (
-    // overflow-hidden on outer prevents footer bleeding in
+    
     <div className='flex flex-col h-screen overflow-hidden'>
       <Navbartwo />
-      {/* flex-1 and min-h-0 allow inner scroll to work correctly */}
+      
       <div className='flex flex-1 min-h-0'>
         <Sidebar />
-        {/* This div scrolls independently — footer never shows here */}
+      
         <div className='flex-1 p-4 pt-10 md:px-10 overflow-y-auto'>
           <Outlet />
         </div>

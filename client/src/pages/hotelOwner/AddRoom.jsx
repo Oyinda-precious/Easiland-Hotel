@@ -33,7 +33,7 @@ const AddRoom = () => {
     const onSubmitHandler = async (e) => {
        e.preventDefault();
 
-       //Check if all inputs are filled  
+       
         if (!inputs.roomType || !inputs.pricePerNight ||
              !inputs.amenities || !Object.values(images).some(image => image)) {
             toast.error("Please fill all the fields")
@@ -44,12 +44,12 @@ const AddRoom = () => {
             const formData = new FormData()
             formData.append('roomType', inputs.roomType)
             formData.append('pricePerNight', inputs.pricePerNight)
-            //converting amenities to array & keeping only the selected amenities
+            
             const amenities = Object.keys(inputs.amenities)
             .filter(key => inputs.amenities[key])
             formData.append('amenities', JSON.stringify(amenities))
 
-            //adding images to formdata
+            
             Object.keys(images).forEach((key)=>{
                 images[key] && formData.append('images', images[key])
             })
@@ -92,7 +92,7 @@ const AddRoom = () => {
         subTitle='Fill in the details carefully and accurate room details, 
         pricing and amenities, to enhance the user booking experience.'/>
         
-        {/* Upload Area For Images. */}
+       
         <p className='text-gray-800 mt-5'>Images</p>
         <div className='grid grid-cols-2 sm:flex gap-4 my-2 flex-wrap'>
             {Object.keys(images).map((key) => (
@@ -106,7 +106,7 @@ const AddRoom = () => {
             ))}
         </div>
 
-             {/* Room Type */}
+             
         <div className='w-full flex max-sm:flex-col sm:gap-4 mt-4'>
            <div className='flex-1 max-w-48'>
             <p className='text-gray-800 mt-4'>Room Type</p>
@@ -119,7 +119,7 @@ const AddRoom = () => {
                 <option value="Family Suite">Family Suite</option>
             </select>
            </div>
-           {/* Price Per Night */}
+           
            <div>
             <p className='mt-4 text-gray-800'>
                 Price <span className='text-xs'>/night</span>
@@ -130,7 +130,7 @@ const AddRoom = () => {
            </div>
         </div>
 
-        {/* Amenities */}
+        
         <p className='text-gray-800 mt-4'>Amenities</p>
         <div className='flex flex-col flex-wrap mt-1 text-gray-400 max-w-sm'>
             {Object.keys(inputs.amenities).map((amenity, index)=>(

@@ -1,4 +1,3 @@
-//Get/api/user
 export const getUserData = async (req, res) => {
   try {
     const role = req.user.role;
@@ -9,7 +8,6 @@ export const getUserData = async (req, res) => {
   }
 };
 
-//Store the recently searched cities by the user
 export const storeRecentSearchedCities = async (req, res) => {
   try {
     const { recentSearchedCity } = req.body;

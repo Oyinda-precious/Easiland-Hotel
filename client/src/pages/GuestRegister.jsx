@@ -9,7 +9,7 @@ const GuestRegisterPage = () => {
   const { registerGuest, googleLoginGuest, guestUser } = useGuestAuth();
   const navigate = useNavigate();
 
-  const [step, setStep] = useState("register"); // "register" | "otp"
+  const [step, setStep] = useState("register"); 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -19,12 +19,12 @@ const GuestRegisterPage = () => {
   const [resendLoading, setResendLoading] = useState(false);
   const [countdown, setCountdown] = useState(0);
 
-  // If already logged in, go home
+  
   useEffect(() => {
     if (guestUser) navigate("/");
   }, [guestUser]);
 
-  // Countdown timer
+  
   useEffect(() => {
     if (countdown > 0) {
       const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
@@ -32,7 +32,7 @@ const GuestRegisterPage = () => {
     }
   }, [countdown]);
 
-  // ── Register handler ──
+  
   const handleRegister = async (e) => {
     e.preventDefault();
     if (password.length < 6) {
@@ -52,7 +52,7 @@ const GuestRegisterPage = () => {
     }
   };
 
-  // ── OTP input handlers ──
+  
   const handleOtpChange = (index, value) => {
     if (!/^\d*$/.test(value)) return;
     const newOtp = [...otp];
@@ -69,7 +69,7 @@ const GuestRegisterPage = () => {
     }
   };
 
-  // ── Verify OTP ──
+  
   const handleVerifyOTP = async (e) => {
     e.preventDefault();
     const otpString = otp.join("");
@@ -99,7 +99,7 @@ const GuestRegisterPage = () => {
     setOtpLoading(false);
   };
 
-  // ── Resend OTP ──
+  
   const handleResendOTP = async () => {
     setResendLoading(true);
     try {
@@ -120,7 +120,7 @@ const GuestRegisterPage = () => {
     setResendLoading(false);
   };
 
-  // ── Google login ──
+ 
   const handleGoogleSuccess = async (credentialResponse) => {
     const result = await googleLoginGuest(credentialResponse.credential);
     if (result.success) {
@@ -133,9 +133,7 @@ const GuestRegisterPage = () => {
     }
   };
 
-  // ════════════════════════════════════════
-  // OTP SCREEN
-  // ════════════════════════════════════════
+  
   if (step === "otp") {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
@@ -205,9 +203,7 @@ const GuestRegisterPage = () => {
     );
   }
 
-  // ════════════════════════════════════════
-  // REGISTER SCREEN
-  // ════════════════════════════════════════
+  
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
       <div className="bg-white rounded-2xl shadow-lg p-8 w-full max-w-md">
@@ -218,7 +214,7 @@ const GuestRegisterPage = () => {
           </p>
         </div>
 
-        {/* Google Login Button */}
+        
         <div className="flex justify-center mb-6">
           <GoogleLogin
             onSuccess={handleGoogleSuccess}
@@ -229,7 +225,7 @@ const GuestRegisterPage = () => {
           />
         </div>
 
-        {/* Divider */}
+       
         <div className="flex items-center gap-3 mb-6">
           <div className="flex-1 h-px bg-gray-200" />
           <span className="text-gray-400 text-sm">or register with email</span>

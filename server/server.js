@@ -8,7 +8,7 @@ import hotelRouter from "./routes/hotelRoutes.js";
 import roomRouter from "./routes/roomRoutes.js";
 import bookingRouter from "./routes/bookingRoutes.js";
 import guestAuthRouter from "./routes/guestAuthRoutes.js";
-import authRouter from "./routes/authRoutes.js"; // ✅ new
+import authRouter from "./routes/authRoutes.js";
 
 connectDB();
 connectCloudinary();
@@ -27,7 +27,7 @@ app.use(express.json());
 app.get("/", (req, res) => res.send("API is running"));
 
 // Routes
-app.use("/api/auth", authRouter); // ✅ new auth routes
+app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
 app.use("/api/guest", guestAuthRouter);
 app.use("/api/hotels", hotelRouter);

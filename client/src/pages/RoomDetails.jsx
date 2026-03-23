@@ -19,7 +19,7 @@ const RoomDetails = () => {
   const [guests, setGuests] = useState(1);
   const [isAvailable, setIsAvailable] = useState(false);
 
-  // Check availability
+  
   const checkAvailability = async () => {
     try {
       if (checkInDate >= checkOutDate) {
@@ -47,7 +47,7 @@ const RoomDetails = () => {
     }
   };
 
-  // Submit handler - check login before booking
+
  const onSubmitHandler = async (e) => {
   e.preventDefault();
 
@@ -106,7 +106,7 @@ const RoomDetails = () => {
 
   return (
     <div className="py-28 md:py-35 px-4 md:px-16 lg:px-24 xl:px-32">
-      {/* Room Details */}
+    
       <div className="flex flex-col md:flex-row items-start md:items-center gap-2">
         <h1 className="text-3xl md:text-4xl font-playfair">
           {room.hotel?.name}
@@ -117,19 +117,18 @@ const RoomDetails = () => {
         </p>
       </div>
 
-      {/* Rating */}
+   
       <div className="flex items-center mt-2 gap-1">
         <StarRating />
         <p className="ml-2">200+ reviews</p>
       </div>
 
-      {/* Address */}
       <div className="flex items-center gap-1 text-gray-500 mt-2">
         <img src={assets.locationIcon} alt="location" />
         <span>{room.hotel?.address}</span>
       </div>
 
-      {/* Images */}
+     
       <div className="flex flex-col lg:flex-row mt-6 gap-6">
         <div className="lg:w-1/2 w-full">
           <img
@@ -152,7 +151,7 @@ const RoomDetails = () => {
         </div>
       </div>
 
-      {/* Highlights */}
+      
       <div className="flex flex-col md:flex-row md:justify-between mt-10">
         <div className="flex flex-col">
           <h1 className="text-3xl md:text-4xl font-playfair">
@@ -173,13 +172,13 @@ const RoomDetails = () => {
         <p className="text-2xl font-medium">₦{room?.pricePerNight.toLocaleString()}/night</p>
       </div>
 
-      {/* Booking Form */}
+     
       <form
         onSubmit={onSubmitHandler}
         className="flex flex-col md:flex-row items-start md:items-center justify-between bg-white shadow-[0px_0px_20px_rgba(0,0,0,0.15)] p-6 rounded-xl mx-auto mt-16 max-w-6xl"
       >
         <div className="flex flex-col flex-wrap md:flex-row items-start md:items-center gap-4 md:gap-10 text-gray-500">
-          {/* Check-In */}
+         
           <div className="flex flex-col">
             <label htmlFor="checkInDate" className="font-medium">Check-In</label>
             <input
@@ -194,7 +193,7 @@ const RoomDetails = () => {
 
           <div className="w-px h-15 bg-gray-300/70 max-md:hidden" />
 
-          {/* Check-Out */}
+          
           <div className="flex flex-col">
             <label htmlFor="checkOutDate" className="font-medium">Check-Out</label>
             <input
@@ -210,7 +209,7 @@ const RoomDetails = () => {
 
           <div className="w-px h-15 bg-gray-300/70 max-md:hidden" />
 
-          {/* Guests */}
+          
           <div className="flex flex-col">
             <label htmlFor="guests" className="font-medium">Guests</label>
             <input
@@ -233,7 +232,7 @@ const RoomDetails = () => {
         </button>
       </form>
 
-      {/* Common Specs */}
+    
       <div className="mt-25 space-y-4">
         {roomCommonData.map((spec, index) => (
           <div key={index} className="flex items-start gap-2">
@@ -254,14 +253,10 @@ const RoomDetails = () => {
         </p>
       </div>
 
-      {/* Hosted by */}
+     
       <div className="flex flex-col items-start gap-4">
         <div className="flex gap-4">
-          {/* <img
-            src={room.hotel?.owner?.image}
-            alt="Host"
-            className="h-14 w-14 md:h-18 md:w-18 rounded-full"
-          /> */}
+          
           <img src={room.hotel?.owner?.image || assets.avatar} alt="Host" className="h-14 w-14 md:h-18 md:w-18 rounded-full" />
           <div>
             <p>Hosted by {room.hotel?.name}</p>
